@@ -396,29 +396,29 @@ init_zitadel() {
   export ZITADEL_ADMIN_PASSWORD
 }
 
-check_nb_domain() {
-  DOMAIN=$1
-  if [ "$DOMAIN-x" == "-x" ]; then
-    echo "The NETBIRD_DOMAIN variable cannot be empty." > /dev/stderr
-    return 1
-  fi
+# check_nb_domain() {
+#   DOMAIN=$1
+#   if [ "$DOMAIN-x" == "-x" ]; then
+#     echo "The NETBIRD_DOMAIN variable cannot be empty." > /dev/stderr
+#     return 1
+#   fi
 
-  if [ "$DOMAIN" == "netbird.example.com" ]; then
-    echo "The NETBIRD_DOMAIN cannot be netbird.example.com" > /dev/stderr
-    return 1
-  fi
-  return 0
-}
+#   if [ "$DOMAIN" == "netbird.example.com" ]; then
+#     echo "The NETBIRD_DOMAIN cannot be netbird.example.com" > /dev/stderr
+#     return 1
+#   fi
+#   return 0
+# }
 
-read_nb_domain() {
-  READ_NETBIRD_DOMAIN=""
-  echo -n "Enter the domain you want to use for NetBird (e.g. netbird.my-domain.com): " > /dev/stderr
-  read -r READ_NETBIRD_DOMAIN < /dev/tty
-  if ! check_nb_domain "$READ_NETBIRD_DOMAIN"; then
-    read_nb_domain
-  fi
-  echo "$READ_NETBIRD_DOMAIN"
-}
+# read_nb_domain() {
+#   READ_NETBIRD_DOMAIN=""
+#   echo -n "Enter the domain you want to use for NetBird (e.g. netbird.my-domain.com): " > /dev/stderr
+#   read -r READ_NETBIRD_DOMAIN < /dev/tty
+#   if ! check_nb_domain "$READ_NETBIRD_DOMAIN"; then
+#     read_nb_domain
+#   fi
+#   echo "$READ_NETBIRD_DOMAIN"
+# }
 
 get_turn_external_ip() {
   TURN_EXTERNAL_IP_CONFIG="#external-ip="
@@ -444,19 +444,19 @@ initEnvironment() {
   TURN_MAX_PORT=65535
   TURN_EXTERNAL_IP_CONFIG=$(get_turn_external_ip)
 
-  if ! check_nb_domain "$NETBIRD_DOMAIN"; then
-    NETBIRD_DOMAIN=$(read_nb_domain)
-  fi
+  # if ! check_nb_domain "$NETBIRD_DOMAIN"; then
+  #   NETBIRD_DOMAIN=$(read_nb_domain)
+  # fi
 
   if [ "$NETBIRD_DOMAIN" == "use-ip" ]; then
     NETBIRD_DOMAIN=$(get_main_ip_address)
-  else
-    ZITADEL_EXTERNALSECURE="true"
-    ZITADEL_TLS_MODE="external"
-    NETBIRD_PORT=443
-    CADDY_SECURE_DOMAIN=", $NETBIRD_DOMAIN:$NETBIRD_PORT"
-    NETBIRD_HTTP_PROTOCOL="https"
-    NETBIRD_RELAY_PROTO="rels"
+  # else
+  #   ZITADEL_EXTERNALSECURE="true"
+  #   ZITADEL_TLS_MODE="external"
+  #   NETBIRD_PORT=443
+  #   CADDY_SECURE_DOMAIN=", $NETBIRD_DOMAIN:$NETBIRD_PORT"
+  #   NETBIRD_HTTP_PROTOCOL="https"
+  #   NETBIRD_RELAY_PROTO="rels"
   fi
 
   if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -574,7 +574,7 @@ renderCaddyfile() {
     }
 }
 
-:80${CADDY_SECURE_DOMAIN} {
+:80$ {
     import security_headers
     # relay
     reverse_proxy /relay* relay:80
